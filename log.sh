@@ -26,6 +26,31 @@ function log(){
 #   If 'LOG_FILE' environment variavle defined, this also output log file defined path
 #
 # External variables(Optional):
+#   DEBUG: if false, output nothing
+#   LOG_FILE: path of log file
+#==========
+function logd(){
+  if [ "true" != "${DEBUG-}" ]; then
+    return
+  fi
+
+  if [ -n "${LOG_FILE-}" ]; then
+    dateNow=$(date '+%Y-%m-%dT%H:%M:%S')
+    echo -e "$(date '+%Y-%m-%dT%H:%M:%S') (${BASH_SOURCE[1]##*/}:${BASH_LINENO[0]}:${FUNCNAME[1]})[DEBUG] $@" |tee -a ${LOG_FILE} 1>&2
+  else
+    echo -e "$(date '+%Y-%m-%dT%H:%M:%S') (${BASH_SOURCE[1]##*/}:${BASH_LINENO[0]}:${FUNCNAME[1]})[DEBUG] $@" 1>&2
+  fi
+}
+
+#==========
+# Usage:
+#   $0 $isDebugmessage
+#
+# Description:
+#   This script output argument to log and stderr.
+#   If 'LOG_FILE' environment variavle defined, this also output log file defined path
+#
+# External variables(Optional):
 #   LOG_FILE: path of log file
 #==========
 function loge(){
